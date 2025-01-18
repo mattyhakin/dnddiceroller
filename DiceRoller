@@ -1,0 +1,52 @@
+#DND Dice Roller
+#Simple Python Script for Dice Rolling in DnD or any other Tabletop RPG Games
+
+import random
+import sys
+
+def roll_dice(dice_type, rolls):
+    """Rolls a specified dice type a given number of times."""
+    print("Rolling...")
+    for _ in range(rolls):
+        result = random.randint(1, dice_type)
+        print(f"--- {result} ---")
+    print("Don't forget your modifiers!\n")
+    sys.exit()  # Exit the program after printing the message
+
+def main():
+    """Main function to handle the dice rolling program."""
+    dice_types = [100, 20, 12, 10, 8, 6, 4]
+    exit_option = len(dice_types) + 1
+
+    while True:
+        ready = input("Ready to roll? (Yes/Y to continue): ").strip().lower()
+        if ready not in ['yes', 'y']:
+            print("Goodbye!")
+            break
+
+        while True:
+            # Display dice options
+            print("\nSelect a dice to roll:")
+            for i, dice in enumerate(dice_types, start=1):
+                print(f"{i}. d{dice}")
+            print(f"{exit_option}. Exit")
+
+            # Get user choice
+            try:
+                choice = int(input("\nWhich dice do you need? "))
+                if choice == exit_option:
+                    print("Goodbye!")
+                    sys.exit()  # Exit the program
+                elif 1 <= choice <= len(dice_types):
+                    rolls = int(input("How many rolls? "))
+                    if rolls > 0:
+                        roll_dice(dice_types[choice - 1], rolls)
+                    else:
+                        print("Number of rolls must be positive.")
+                else:
+                    print("Invalid choice. Please select a valid option.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+
+if __name__ == "__main__":
+    main()
