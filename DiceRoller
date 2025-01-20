@@ -1,52 +1,40 @@
-#DND Dice Roller
-#Simple Python Script for Dice Rolling in DnD or any other Tabletop RPG Games
-
 import random
-import sys
 
-def roll_dice(dice_type, rolls):
-    """Rolls a specified dice type a given number of times."""
-    print("Rolling...")
-    for _ in range(rolls):
-        result = random.randint(1, dice_type)
-        print(f"--- {result} ---")
-    print("Don't forget your modifiers!\n")
-    sys.exit()  # Exit the program after printing the message
+dice_types = [100, 20, 12, 10, 8, 6, 4]
+exit_option = len(dice_types) + 1
 
-def main():
-    """Main function to handle the dice rolling program."""
-    dice_types = [100, 20, 12, 10, 8, 6, 4]
-    exit_option = len(dice_types) + 1
+ready = input("Ready to Roll? (Yes/Y to continue): ").strip().lower()
+if ready not in ['yes', 'y']:
+    print("Bye-bye!")
+    exit()
 
-    while True:
-        ready = input("Ready to roll? (Yes/Y to continue): ").strip().lower()
-        if ready not in ['yes', 'y']:
-            print("Goodbye!")
-            break
+RollType = input("What Type of Roll is it? (ability, saving, attack, initiative, 'other'): ").strip().lower()
 
-        while True:
-            # Display dice options
-            print("\nSelect a dice to roll:")
-            for i, dice in enumerate(dice_types, start=1):
-                print(f"{i}. d{dice}")
-            print(f"{exit_option}. Exit")
+if RollType in ['initiative', 'ability', 'saving']:
+    dice_type = 20
+    rolls = 1
+elif RollType in ['saving', 'other']:
+    for i in range(len(dice_types)):
+        print(str(i + 1) + ". d" + str(dice_types[i]))
+    
+    dice_choice = int(input("Which Dice Do You Need?: "))
+    dice_type = dice_types[dice_choice - 1]
+    rolls = int(input("How many dice do you need to roll?: "))
+else:
+    print("Invalid roll type.")
+    exit()
 
-            # Get user choice
-            try:
-                choice = int(input("\nWhich dice do you need? "))
-                if choice == exit_option:
-                    print("Goodbye!")
-                    sys.exit()  # Exit the program
-                elif 1 <= choice <= len(dice_types):
-                    rolls = int(input("How many rolls? "))
-                    if rolls > 0:
-                        roll_dice(dice_types[choice - 1], rolls)
-                    else:
-                        print("Number of rolls must be positive.")
-                else:
-                    print("Invalid choice. Please select a valid option.")
-            except ValueError:
-                print("Invalid input. Please enter a number.")
+mod = int(input("Enter your modifier: "))
 
-if __name__ == "__main__":
-    main()
+def RollDice(dice_type, rolls, mod):
+    print("Here we go...")
+    total = 0
+    for i in range(rolls):
+        d = random.randint(1, dice_type)
+        print("---" + str(d) + "---")
+        total += d
+    total += mod
+    print(f"Total (including modifier): {total}")
+    print()
+
+RollDice(dice_type, rolls, mod)
